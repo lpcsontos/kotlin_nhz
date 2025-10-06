@@ -18,6 +18,7 @@ class UserServiceImpl : UserService {
             val insertedId = UserTable.insertAndGetId {
                 it[username] = params.username
                 it[password] = hash(params.password, "${Env["HASH_ROUNDS"]}".toInt())
+                it[description] = params.description
                 it[createdAt] = LocalDateTime.now()
             }
 

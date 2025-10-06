@@ -7,6 +7,7 @@ import java.time.LocalDateTime
 data class User (
     val id: Int,
     val username: String,
+    val description: String,
     var authToken: String? = null,
     val createdAt: String,
 )

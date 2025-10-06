@@ -8,5 +8,6 @@ import java.time.LocalDateTime
 object UserTable : IntIdTable("users") {
     val username = varchar("username", 20)
     val password = varchar("password", 61)
+    val description = varchar("description", 100)
     val createdAt = datetime("created_at").clientDefault { LocalDateTime.now() }
 }

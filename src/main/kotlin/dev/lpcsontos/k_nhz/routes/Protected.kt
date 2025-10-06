@@ -31,7 +31,7 @@ fun Application.protectedRoutes(service: UserService) {
 
                     val user = service.findUserByUsername(requestedUsername)
                     if (user != null) {
-                        call.respond(ProfileResponse(userId = 0, username = user.username))
+                        call.respond(ProfileResponse(description = user.description, username = user.username))
                     }
                     call.respond(HttpStatusCode.BadRequest)
                 }
