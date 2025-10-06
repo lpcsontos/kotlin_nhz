@@ -6,6 +6,7 @@ import dev.lpcsontos.k_nhz.model.User
 import dev.lpcsontos.k_nhz.config.dbQuery
 import dev.lpcsontos.k_nhz.db.UserTable
 import dev.lpcsontos.k_nhz.security.hash
+import dev.lpcsontos.k_nhz.security.verify
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.selectAll
 import java.time.LocalDateTime
@@ -22,6 +23,20 @@ class UserServiceImpl : UserService {
             UserTable.selectAll().where{UserTable.id eq insertedId.value}
                 .map { rowToUser(it) }
                 .singleOrNull()
+        }
+    }
+
+    override suspend fun authUser(username: String, password: String): User? {
+        return dbQuery {
+            val row = UserTable.selectAll().where { UserTable.username eq username }
+                .singleOrNull()
+
+            if (row != null) {
+                val storedHash = row[UserTable.password]
+                if (verify(password, storedHash)) {
+                    rowToUser(row)
+                } else null
+            } else null
         }
     }
 

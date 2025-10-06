@@ -8,17 +8,17 @@ import kotlinx.serialization.Serializable
 data class BaseResponse(
     val success: Boolean,
     val message: String? = null,
-    val data: User? = null
+    val authToken: String? = null
 )
 
-fun SuccessResponse(user: User, message: String? = null) = BaseResponse(
+fun SuccessResponse(token: String, message: String? = null) = BaseResponse(
     success = true,
     message = message,
-    data = user
+    authToken = token
 )
 
 fun ErrorResponse(message: String) = BaseResponse(
     success = false,
     message = message,
-    data = null
+    authToken = null
 )

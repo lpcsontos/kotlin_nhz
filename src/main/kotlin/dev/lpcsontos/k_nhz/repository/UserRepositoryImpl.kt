@@ -19,21 +19,18 @@ class UserRepositoryImpl(
             if(user != null) {
                 val token = jwtService.generateToken(user.id, user.username)
                 user.authToken = token
-                SuccessResponse(user = user, message = "Success")
+                SuccessResponse(token, message = "Success")
             }
             else ErrorResponse(message = "User could not be created error")
         }
     }
 
-    override suspend fun loginUser(
-        username: String,
-        password: String
-    ): BaseResponse {
-        val user = userService.findUserByUsername(username)
+    override suspend fun loginUser(username: String, password: String): BaseResponse {
+        val user = userService.authUser(username, password)
         return if (user != null) {
             val token = jwtService.generateToken(user.id, user.username)
             user.authToken = token
-            SuccessResponse(user = user, message = "Login successful")
+            SuccessResponse(token, message = "Login successful")
         } else {
             ErrorResponse(message = "Invalid username or password")
         }

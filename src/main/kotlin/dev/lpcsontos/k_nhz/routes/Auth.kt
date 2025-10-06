@@ -17,9 +17,20 @@ fun Application.authRoutes(repository: UserRepository) {
                 val parameters = call.receive<CreateUserParams>()
                 val result = repository.registerUser(parameters)
                 val statusCode = if (result.success) {
-                    HttpStatusCode.OK
+                    HttpStatusCode.Created
                 } else {
                     HttpStatusCode.BadRequest
+                }
+                call.respond(statusCode, result)
+            }
+
+            post("/login"){
+                val parameters = call.receive<CreateUserParams>()
+                val result = repository.loginUser(parameters. username, parameters.password)
+                val statusCode = if (result.success) {
+                    HttpStatusCode.OK
+                } else {
+                    HttpStatusCode.Unauthorized
                 }
                 call.respond(statusCode, result)
             }
