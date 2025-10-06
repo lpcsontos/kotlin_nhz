@@ -17,6 +17,7 @@ application {
 }
 
 dependencies {
+    implementation("io.ktor:ktor-server-rate-limit")
     implementation("org.mindrot:jbcrypt:0.4")
     implementation("io.ktor:ktor-server-auth")
     implementation("io.ktor:ktor-server-auth-jwt")

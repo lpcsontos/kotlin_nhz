@@ -5,6 +5,7 @@ import dev.lpcsontos.k_nhz.config.Env
 import dev.lpcsontos.k_nhz.model.User
 import dev.lpcsontos.k_nhz.config.dbQuery
 import dev.lpcsontos.k_nhz.db.UserTable
+import dev.lpcsontos.k_nhz.dto.UserParams
 import dev.lpcsontos.k_nhz.security.hash
 import dev.lpcsontos.k_nhz.security.verify
 import org.jetbrains.exposed.sql.ResultRow
@@ -12,7 +13,7 @@ import org.jetbrains.exposed.sql.selectAll
 import java.time.LocalDateTime
 
 class UserServiceImpl : UserService {
-    override suspend fun registerUser(params: CreateUserParams): User? {
+    override suspend fun registerUser(params: UserParams): User? {
         return dbQuery {
             val insertedId = UserTable.insertAndGetId {
                 it[username] = params.username

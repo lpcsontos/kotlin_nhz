@@ -11,7 +11,7 @@ fun Application.configureSecurity() {
     val jwtAudience = "jwt-audience"
     val jwtDomain = "https://jwt-provider-domain/"
     val jwtRealm = "kotlin nagyhazi chat app"
-    val jwtSecret = "secret"
+    val jwtSecret = "${Env["JWT_SECRET"]}"
     authentication {
         jwt("auth-jwt"){
             realm = jwtRealm
@@ -23,7 +23,9 @@ fun Application.configureSecurity() {
                     .build()
             )
             validate { credential ->
-                if (credential.payload.audience.contains(jwtAudience)) JWTPrincipal(credential.payload) else null
+                if (credential.payload.audience.contains(jwtAudience)) {
+                    JWTPrincipal(credential.payload)
+                } else null
             }
             challenge { _, _ ->
                 call.respond(

@@ -1,9 +1,8 @@
 package dev.lpcsontos.k_nhz.repository
 
-import dev.lpcsontos.k_nhz.db.UserTable.username
-import dev.lpcsontos.k_nhz.service.CreateUserParams
+import dev.lpcsontos.k_nhz.dto.UserParams
 import dev.lpcsontos.k_nhz.service.JWTService
-import dev.lpcsontos.k_nhz.utils.BaseResponse
+import dev.lpcsontos.k_nhz.dto.BaseResponse
 import dev.lpcsontos.k_nhz.service.UserService
 import dev.lpcsontos.k_nhz.utils.ErrorResponse
 import dev.lpcsontos.k_nhz.utils.SuccessResponse
@@ -12,7 +11,7 @@ class UserRepositoryImpl(
     private val userService: UserService,
     private val jwtService: JWTService
 ) : UserRepository {
-    override suspend fun registerUser(params: CreateUserParams): BaseResponse {
+    override suspend fun registerUser(params: UserParams): BaseResponse {
         return if(isUsernameExist(params.username)) ErrorResponse(message = "Username already taken")
         else{
             val user = userService.registerUser(params)
