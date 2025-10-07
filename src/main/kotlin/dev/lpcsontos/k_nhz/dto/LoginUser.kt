@@ -3,7 +3,7 @@ package dev.lpcsontos.k_nhz.dto
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ProfileResponse(
-    val description: String,
-    val displayname: String,
+data class LoginUser(
+    val username: String,
+    val password: String,
 )

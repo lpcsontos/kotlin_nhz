@@ -6,5 +6,6 @@ import kotlinx.serialization.Serializable
 data class UserParams(
     val username: String,
     val password: String,
+    val displayname: String,
     val description: String,
 )

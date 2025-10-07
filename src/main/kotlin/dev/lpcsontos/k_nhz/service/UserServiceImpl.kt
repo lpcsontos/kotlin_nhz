@@ -6,6 +6,7 @@ import dev.lpcsontos.k_nhz.model.User
 import dev.lpcsontos.k_nhz.config.dbQuery
 import dev.lpcsontos.k_nhz.db.UserTable
 import dev.lpcsontos.k_nhz.dto.UserParams
+import dev.lpcsontos.k_nhz.security.generateUniqueSlug
 import dev.lpcsontos.k_nhz.security.hash
 import dev.lpcsontos.k_nhz.security.verify
 import org.jetbrains.exposed.sql.ResultRow
@@ -14,10 +15,14 @@ import java.time.LocalDateTime
 
 class UserServiceImpl : UserService {
     override suspend fun registerUser(params: UserParams): User? {
+        val slug = generateUniqueSlug(this)
+
         return dbQuery {
             val insertedId = UserTable.insertAndGetId {
                 it[username] = params.username
                 it[password] = hash(params.password, "${Env["HASH_ROUNDS"]}".toInt())
+                it[profileslug] = slug
+                it[displayname] = params.displayname
                 it[description] = params.description
                 it[createdAt] = LocalDateTime.now()
             }
@@ -51,11 +56,23 @@ class UserServiceImpl : UserService {
         return user
     }
 
+    override suspend fun findUserBySlug(slug: String): User? {
+        val user = dbQuery {
+            UserTable.selectAll().where{UserTable.profileslug eq slug}
+                .map { rowToUser(it) }
+                .singleOrNull()
+        }
+        return user
+    }
+
     private fun rowToUser(row: ResultRow?): User? {
         return if(row == null) null
         else User(
             id = row[UserTable.id].value,
             username = row[UserTable.username],
+            profileslug = row[UserTable.profileslug],
+            displayname = row[UserTable.displayname],
+            description = row[UserTable.description],
             createdAt = row[UserTable.createdAt].toString()
         )
     }

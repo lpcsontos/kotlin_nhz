@@ -16,22 +16,22 @@ fun Application.protectedRoutes(service: UserService) {
     routing {
         authenticate("auth-jwt") {
             rateLimit(RateLimitName("profile-lookup")) {
-                get("/profile/{username}") {
-                    val requestedUsername = call.parameters["username"] ?: return@get call.respond(
+                get("/profile/{urlSlug}") {
+                    val requestedUser = call.parameters["urlSlug"] ?: return@get call.respond(
                         HttpStatusCode.BadRequest,
                         mapOf("error" to "Username parameter missing")
                     )
 
-                    if (requestedUsername.length > 20 || !requestedUsername.matches(Regex("^[a-zA-Z0-9_]+$"))) {
+                    if (requestedUser.length > 50 || !requestedUser.matches(Regex("^[a-zA-Z0-9_]+$"))) {
                         return@get call.respond(
                             HttpStatusCode.BadRequest,
                             mapOf("error" to "Oops something went wrong")
                         )
                     }
 
-                    val user = service.findUserByUsername(requestedUsername)
+                    val user = service.findUserBySlug(requestedUser)
                     if (user != null) {
-                        call.respond(ProfileResponse(description = user.description, username = user.username))
+                        call.respond(ProfileResponse(description = user.description, displayname = user.displayname))
                     }
                     call.respond(HttpStatusCode.BadRequest)
                 }

@@ -7,4 +7,5 @@ interface UserService {
     suspend fun registerUser(params: UserParams): User?
     suspend fun findUserByUsername(username: String): User?
     suspend fun authUser(username: String, password: String): User?
+    suspend fun findUserBySlug(slug: String): User?
 }

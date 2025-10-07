@@ -1,5 +1,6 @@
 package dev.lpcsontos.k_nhz.routes
 
+import dev.lpcsontos.k_nhz.dto.LoginUser
 import dev.lpcsontos.k_nhz.repository.UserRepository
 import dev.lpcsontos.k_nhz.dto.UserParams
 import io.ktor.http.HttpStatusCode
@@ -28,7 +29,7 @@ fun Application.authRoutes(repository: UserRepository) {
                 }
 
                 post("/login") {
-                    val parameters = call.receive<UserParams>()
+                    val parameters = call.receive<LoginUser>()
                     val result = repository.loginUser(parameters.username, parameters.password)
                     val statusCode = if (result.success) {
                         HttpStatusCode.OK
